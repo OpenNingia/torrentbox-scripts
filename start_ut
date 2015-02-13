@@ -1,0 +1,4 @@
+#!/bin/sh
+cd ~/Apps/utorrent-server-alpha-v3_3/
+./utserver -daemon -pidfile ./utserver.pid -logfile ./utserver.log
+cd
