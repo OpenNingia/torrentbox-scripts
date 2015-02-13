@@ -67,7 +67,8 @@ Info: {hh}
 
 
 def main():
-    if len(sys.argv) < 1:
+    if len(sys.argv) < 5:
+        print('missing arguments')
         return
     try:
         what = sys.argv[1]
