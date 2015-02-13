@@ -1,0 +1,5 @@
+{
+    "push_on_status_changes": "false",
+    "push_on_completed: "true",
+    "statuses_to_push": [1, 2, 3, 4, 5, 6, 7, 8, 9]
+}
