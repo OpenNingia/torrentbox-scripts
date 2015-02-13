@@ -1,28 +1,42 @@
 #!/usr/bin/python
+__author__ = 'Daniele Simonetti <oppifjellet@gmail.com>'
 
+import os
 import sys
+import json
 from pushbullet import PushBullet
 
+CFG_FILE = "torrentpush.conf"
 PB_API_KEY = ""
 
-def __push_torrent_status(torname, torstatus, torlabel, torhash):
-    pb = PushBullet(PB_API_KEY)
+class PushConfig(object):
+    def __init__(self):
 
-    success = False
-    push = None
-    if torstatus == '1':
-        success, push = pb.push_note("Torrent in errore",
-                                     """ \
-Nome: {nm},
-Label: {lb},
-Info: {hh}
-""".format(nm=torname, lb=torlabel, hh=torhash))
+        self.push_on_status_changes = False
+        self.push_on_completed = True
+        self.statuses_to_push = []
 
+        if os.path.exists(CFG_FILE):
+            with open(CFG_FILE, 'rt') as fp:
+                try:
+                    js = json.load(fp)
+                    if 'push_on_status_changes' in js:
+                        self.push_on_status_changes = js['push_on_status_changes']
+                    if 'push_on_completed' in js:
+                        self.push_on_completed = js['push_on_completed']
+                    if 'statuses_to_push' in js:
+                        self.statuses_to_push = js['statuses_to_push']
+                except:
+                    pass
+
+CFG_OBJ = PushConfig()
 
 def push_torrent_status(torname, torstatus, torstatmsg, torlabel, torhash):
 
-    if (    torstatus != '3' and
-            torstatus != '13'):
+    if not CFG_OBJ.push_on_status_changes:
+        return
+
+    if torstatus not in CFG_OBJ.statuses_to_push:
         return
 
     pb = PushBullet(PB_API_KEY)
@@ -38,6 +52,10 @@ Info: {hh}
 
 
 def push_torrent_finish(torname, torlabel, torhash):
+
+    if not CFG_OBJ.push_on_completed:
+        return
+
     pb = PushBullet(PB_API_KEY)
 
     success, push = pb.push_note("Torrent completato",

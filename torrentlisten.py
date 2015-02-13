@@ -19,10 +19,14 @@ ma = None
 def on_push(psh):
     print ('received push:', psh)
     psh_type = psh['type']
+    psh_subtype = psh['subtype'] if 'subtype' in psh else None
+
+    print('type', psh_type, 'subtype', psh_subtype)
 
     if psh_type == 'tickle':
         on_tickle()
-
+    elif psh_type == 'push':
+        pass
 
 def on_tickle():
     global ma
@@ -36,6 +40,9 @@ def on_tickle():
     print('last modified', ma)
 
     for p in pushes:
+
+        if 'source_device_iden' in p:
+            print(p['source_device_iden'])
         if 'title' in p:
             print(p['title'])
         elif 'url' in p:
