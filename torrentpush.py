@@ -67,15 +67,18 @@ Info: {hh}
 
 
 def main():
-    if len(sys.argv) < 1:
+    if len(sys.argv) < 5:
+        print('missing arguments')
         return
-
-    what = sys.argv[1]
-    if what == 's':
-        push_torrent_status(sys.argv[2], sys.argv[3], sys.argv[4],
-                            sys.argv[5], sys.argv[6])
-    else:
-        push_torrent_finish(sys.argv[2], sys.argv[3], sys.argv[4])
+    try:
+        what = sys.argv[1]
+        if what == 's':
+            push_torrent_status(sys.argv[2], sys.argv[3], sys.argv[4],
+                                sys.argv[5], sys.argv[6])
+        else:
+            push_torrent_finish(sys.argv[2], sys.argv[3], sys.argv[4])
+    except:
+        print('push failed')
 
 if __name__ == '__main__':
     main()
