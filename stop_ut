@@ -1,1 +1,4 @@
-killall -s INT utserver
+#!/bin/bash
+# killall -s INT utserver
+pkill -INT -e -F ~/Apps/utorrent-server-alpha-v3_3/utserver.pid
+cat  ~/Apps/utorrent-server-alpha-v3_3/utserver.pid | wait
