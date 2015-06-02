@@ -15,7 +15,7 @@ def pieces_generator(info):
                     sfile.close()
                     break
                 yield piece
-                piece = ""
+                piece = ""				
         if piece != "":
             yield piece
     else: # yield pieces from a single file torrent
