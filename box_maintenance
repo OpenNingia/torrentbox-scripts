@@ -1,0 +1,30 @@
+#!/bin/bash
+
+DISK=/dev/disk/by-label/ARCHIVIO
+MOUNT=/media/daniele/ARCHIVIO
+DELUGE_DAEMON=/home/daniele/deluge-run/deluged
+DELUGE_USER=daniele
+
+# stop the samba server
+service samba stop
+
+# stop the deluge server
+killall deluged
+
+# finally kill all the processes accessing the disk
+fuser -m -k -INT $DISK
+
+# then umount the disk
+umount $MOUNT
+
+# launch fsck on the block device
+fsck -V -p $DISK
+
+# re-mount the device
+mount $DISK $MOUNT
+
+# start samba service
+service samba start
+
+# start deluge daemon
+su $DELUGE_USER -c '$DELUGE_DAEMON'

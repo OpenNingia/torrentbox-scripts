@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo /bin/su plex -c 'env LD_LIBRARY_PATH=/usr/lib/plexmediaserver /usr/lib/plexmediaserver/Plex\ Media\ Scanner -s -c 3'
