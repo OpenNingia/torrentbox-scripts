@@ -1,30 +1,57 @@
 #!/bin/bash
 
-DISK=/dev/disk/by-label/ARCHIVIO
+DISK1=/dev/disk/by-label/ARCHIVIO
+DISK2=/dev/sda1
+DISK=$DISK1
 MOUNT=/media/daniele/ARCHIVIO
 DELUGE_DAEMON=/home/daniele/deluge-run/deluged
 DELUGE_USER=daniele
 
 # stop the samba server
 service samba stop
+logger "maintenance: stopped samba server"
 
 # stop the deluge server
 killall deluged
+logger "maintenance: stopped deluge daemon"
+
+# stop plex media server
+service plexmediaserver stop
+logger "maintenance: stopped plex media server"
+
+if [ -e $DISK1 ]
+then
+  DISK=$DISK1
+else
+  logger "$DISK1 not found, use $DISK2 as fallback"
+  DISK=$DISK2
+fi
 
 # finally kill all the processes accessing the disk
-fuser -m -k -INT $DISK
+#fuser -m -w -k -INT $DISK
+#logger "maintenance: killed processes with write access on $DISK"
 
 # then umount the disk
 umount $MOUNT
+logger "maintenance: umounted $MOUNT"
 
 # launch fsck on the block device
 fsck -V -p $DISK
+logger "maintenance: ran fsck on $DISK"
 
 # re-mount the device
 mount $DISK $MOUNT
+logger "maintenance: mounted $DISK on $MOUNT"
 
 # start samba service
 service samba start
+logger "maintenance: started samba service"
 
 # start deluge daemon
 su $DELUGE_USER -c '$DELUGE_DAEMON'
+logger "maintenance: started deluge daemon"
+
+# start plex media server
+service plexmediaserver start
+logger "started plex media server"
+
