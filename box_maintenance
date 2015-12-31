@@ -4,12 +4,12 @@ DISK1=/dev/disk/by-label/ARCHIVIO
 DISK2=/dev/sda1
 DISK=$DISK1
 MOUNT=/media/daniele/ARCHIVIO
-DELUGE_DAEMON=/home/daniele/deluge-run/deluged
+DELUGE_DAEMON="/home/pi/torrentbox-scripts/start_deluge"
 DELUGE_USER=daniele
 
 # stop the samba server
-service samba stop
-logger "maintenance: stopped samba server"
+# service samba stop
+# logger "maintenance: stopped samba server"
 
 # stop the deluge server
 killall deluged
@@ -44,11 +44,11 @@ mount $DISK $MOUNT
 logger "maintenance: mounted $DISK on $MOUNT"
 
 # start samba service
-service samba start
-logger "maintenance: started samba service"
+# service samba start
+# logger "maintenance: started samba service"
 
 # start deluge daemon
-su $DELUGE_USER -c '$DELUGE_DAEMON'
+su - $DELUGE_USER -c $DELUGE_DAEMON
 logger "maintenance: started deluge daemon"
 
 # start plex media server

@@ -1,2 +1,2 @@
 #!/bin/bash
-deluged
+/usr/bin/deluged --port=58846 --config=/home/pi/.config/deluge
